@@ -10,9 +10,9 @@ interface MemoService {
 // Handle memos only on memory
 class MemoServiceForDev implements MemoService {
   private memos: Memo[] = [
-    new Memo("TestMemo3", "Body3\npiyopiyo\npiyopiyo"),
-    new Memo("TestMemo2", "Body2\nfugafuga\nfugafuga"),
-    new Memo("TestMemo1", "Body1\nhogehoge\nhogehoge"),
+    new Memo("uuid3", "TestMemo3", "Body3\npiyopiyo\npiyopiyo"),
+    new Memo("uuid2", "TestMemo2", "Body2\nfugafuga\nfugafuga"),
+    new Memo("uuid1", "TestMemo1", "Body1\nhogehoge\nhogehoge"),
   ]
 
   createMemo = (newMemo: Memo) => {

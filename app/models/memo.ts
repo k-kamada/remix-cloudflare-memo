@@ -1,13 +1,11 @@
-import { v7 as uuid } from "uuid"
-
 export class Memo {
-  id: string
+  id: string //uuid
   title: string
   body: string
   createdAt: Date
   isArchived: boolean
-  constructor(title: string, body: string) {
-    this.id = uuid()
+  constructor(id: string, title: string, body: string) {
+    this.id = id
     this.title = title
     this.body = body
     this.createdAt = new Date()
