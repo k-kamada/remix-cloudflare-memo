@@ -1,6 +1,14 @@
 import { Memo } from "~/models/memo"
-import sqlite3 from "sqlite3"
-import { buildArchiveMemoQuery, buildDeleteMemoQuery, buildInsertMemoQuery, buildSelectMemoQuery, createMemoFromRow, memoToDbParams } from "~/utils/db.server"
+import type sqlite3 from "sqlite3"
+import {
+  buildArchiveMemoQuery,
+  buildDeleteMemoQuery,
+  buildInsertMemoQuery,
+  buildSelectMemoQuery,
+  createMemoFromRow,
+  memoToDbParams
+} from "~/utils/db.server"
+import type { D1Database } from "@cloudflare/workers-types"
 
 interface MemoService {
   createMemo: (newMemo: Memo) => Promise<boolean>
@@ -176,11 +184,9 @@ export class D1MemoService implements MemoService {
 }
 
 export const createMemoService = (env: Env): MemoService => {
-  // const env = process.env.NODE_ENV
-  // if (env === 'development') {
-  //   const db = new sqlite3.Database(':memory:')
-  //   return new SQLiteMemoService(db)
-  // }
-  // return new ExperimentMemoService()
-  return new ExperimentMemoService()
+  const nodenv = process.env.NODE_ENV
+  if (nodenv === 'development') {
+    return new ExperimentMemoService()
+  }
+  return new D1MemoService(env.DB)
 }

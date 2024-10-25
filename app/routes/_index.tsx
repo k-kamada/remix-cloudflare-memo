@@ -1,5 +1,4 @@
 import type { ActionFunction, ActionFunctionArgs } from "@remix-run/cloudflare";
-import { json } from "@remix-run/react";
 import { MemoForm } from "~/components/memoForm";
 import { Memo } from "~/models/memo";
 import { createMemoService } from "~/services/memoService.server";
@@ -12,8 +11,8 @@ export const action: ActionFunction = async ({ request, context }: ActionFunctio
   const body = formData.get("body")?.toString() ?? ""
   const memoId = uuid()
   const memoService = createMemoService(context.cloudflare.env)
-  const newMemo = memoService.createMemo(new Memo(memoId, title, body))
-  return json(newMemo)
+  const result = await memoService.createMemo(new Memo(memoId, title, body))
+  return result ? { message: "successfully created" } : { message: "failed to create" }
 }
 
 export default function Index() {
