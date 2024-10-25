@@ -1,8 +1,10 @@
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare"
 import { useLoaderData } from "@remix-run/react"
 import { MemoList } from "~/components/memoList"
-import { memoService } from "~/services/memoService.server"
+import { createMemoService } from "~/services/memoService.server"
 
-export const loader = async () => {
+export const loader = async ({ context }: LoaderFunctionArgs) => {
+  const memoService = createMemoService(context.cloudflare.env)
   const memos = await memoService.getAllMemos(true)
   return { memos: memos }
 }

@@ -4,11 +4,11 @@ export class Memo {
   body: string
   createdAt: Date
   isArchived: boolean
-  constructor(id: string, title: string, body: string) {
+  constructor(id: string, title: string, body: string, createdAt?: Date, isArchived?: boolean) {
     this.id = id
     this.title = title
     this.body = body
-    this.createdAt = new Date()
-    this.isArchived = false
+    this.createdAt = createdAt ?? new Date()
+    this.isArchived = isArchived ?? false
   }
 }
