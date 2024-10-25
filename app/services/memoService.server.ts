@@ -18,7 +18,7 @@ interface MemoService {
 }
 
 // Handle memos only on memory, for prototyping
-class ExperimentMemoService implements MemoService {
+class MemoryMemoService implements MemoService {
   private memos: Memo[] = [
     new Memo("uuid3", "TestMemo3", "Body3\npiyopiyo\npiyopiyo"),
     new Memo("uuid2", "TestMemo2", "Body2\nfugafuga\nfugafuga"),
@@ -26,8 +26,13 @@ class ExperimentMemoService implements MemoService {
   ]
 
   createMemo = (newMemo: Memo) => {
+    const beforeNum = this.memos.length
     this.memos.unshift(newMemo)
-    return Promise.resolve(true)
+    if (beforeNum !== this.memos.length) {
+      return Promise.resolve(true)
+    }
+    console.error("Failed to create memo")
+    return Promise.reject(false)
   }
 
   getAllMemos = (isArchived: boolean) => {
@@ -126,7 +131,7 @@ export class SQLiteMemoService implements MemoService {
   }
 }
 
-// using D1 for Production
+// using D1 for Workers environment
 export class D1MemoService implements MemoService {
   private DB: D1Database
   constructor(db: D1Database) {
@@ -183,10 +188,15 @@ export class D1MemoService implements MemoService {
   };
 }
 
-export const createMemoService = (env: Env): MemoService => {
-  const nodenv = process.env.NODE_ENV
-  if (nodenv === 'development') {
-    return new ExperimentMemoService()
+let _memoService: MemoService | undefined
+export const getMemoService = (env: Env): MemoService => {
+  if (_memoService == null) {
+    const nodenv = process.env.NODE_ENV
+    if (nodenv === 'development') {
+      _memoService = new MemoryMemoService()
+    } else {
+      _memoService = new D1MemoService(env.DB)
+    }
   }
-  return new D1MemoService(env.DB)
+  return _memoService
 }

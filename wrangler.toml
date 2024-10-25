@@ -1,5 +1,6 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "remix-memo"
+compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2024-10-18"
 main = "./build/worker/index.js"
 assets = { directory = "./build/client" }
@@ -14,3 +15,7 @@ enabled = true
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "${env.DATABASE_NAME}"
 database_id = "${env.DATABASE_ID}"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "${env.KV_ID}"
