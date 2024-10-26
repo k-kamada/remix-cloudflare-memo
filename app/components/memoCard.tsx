@@ -4,9 +4,19 @@ import { RoundedDangerButton } from "./roundedButton"
 import Linkify from "linkify-react"
 
 // used for displaying purpose only (not for creating / editing)
-export const MemoCard = (props: { memo: Memo }) => {
+export const MemoCard = (props: {
+  memo: Memo,
+  isFocused: boolean
+  setCurrentMemoId: React.Dispatch<React.SetStateAction<string | null>>
+}) => {
+  const borderColor = props.isFocused ? "border-sky-400" : "border-black"
   return (
-    <div id={props.memo.id} className="bg-white border-2 border-black rounded-md p-2">
+    <button
+      id={props.memo.id}
+      className={`bg-white border-2 ${borderColor} rounded-md p-2 text-inherit text-left`}
+      onClick={() => props.setCurrentMemoId(props.memo.id)}
+      type="button"
+    >
       <ManipulateBar
         memoId={props.memo.id}
         createdAt={props.memo.createdAt}
@@ -22,7 +32,7 @@ export const MemoCard = (props: { memo: Memo }) => {
         </div>
         : null
       }
-    </div>
+    </button>
   )
 }
 
