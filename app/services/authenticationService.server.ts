@@ -1,10 +1,15 @@
 import type { AppLoadContext } from "@remix-run/cloudflare"
+import bcrypt from "bcryptjs"
 
 interface AuthenticationService {
-  login: (username: string, plainPassword: string) => Promise<boolean>
-  logout: () => void
+  verify: (username: string, plainPassword: string) => Promise<boolean>
 }
 
+const verifyPassword = async (plainPassword: string, hashedPassword: string): Promise<boolean> => {
+  return bcrypt.compare(plainPassword, hashedPassword)
+}
+
+// for KV of miniflare or production Worker
 export class KVAuthenticationService implements AuthenticationService {
   private KV: KVNamespace
 
@@ -12,36 +17,30 @@ export class KVAuthenticationService implements AuthenticationService {
     this.KV = KV
   }
 
-  login = async (username: string, plainPassword: string) => {
+  verify = async (username: string, plainPassword: string) => {
     const name = await this.KV.get("user")
-    const hashedPass = await this.KV.get("password")
-    if (name && hashedPass && name === username && hashedPass === plainPassword) {
-      return Promise.resolve(true)
+    const hashedPassword = await this.KV.get("password")
+    if (name && hashedPassword && name === username) {
+      return verifyPassword(plainPassword, hashedPassword)
     }
     return Promise.resolve(false)
-  }
-
-  logout = async () => {
   }
 }
 
+// for vite development server
 export class MemoryAuthenticationService implements AuthenticationService {
-  private KV = new Map<string, string>([
+  private OnMemoryKV = new Map<string, string>([
     ["user", "admin"],
-    // ["password", "$2a$10$pJwEenLsLEFvetKPIb8gDOl9WHbkKbayNZSq4VwynZERDQxTn7Uu6"], // hashed 'admin'
-    ["password", "admin"], // hashed 'admin'
+    ["password", "$2a$10$pJwEenLsLEFvetKPIb8gDOl9WHbkKbayNZSq4VwynZERDQxTn7Uu6"], // hashed 'admin'
   ])
 
-  login = async (username: string, plainPassword: string) => {
-    const name = this.KV.get("user")
-    const hashedPass = this.KV.get("password")
-    if (name && hashedPass && name === username && hashedPass === plainPassword) {
-      return Promise.resolve(true)
+  verify = async (username: string, plainPassword: string) => {
+    const name = this.OnMemoryKV.get("user")
+    const hashedPassword = this.OnMemoryKV.get("password")
+    if (name && hashedPassword && name === username) {
+      return verifyPassword(plainPassword, hashedPassword)
     }
     return Promise.resolve(false)
-  }
-
-  logout = async () => {
   }
 }
 
