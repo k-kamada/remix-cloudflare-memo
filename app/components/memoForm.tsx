@@ -28,18 +28,6 @@ export const MemoForm = (props: { action: string }) => {
     }, [isValidMemo])
   )
 
-  // autosave when unmount
-  useEffect(() => {
-    return () => {
-      if (isValidMemo()) {
-        const formData = new FormData()
-        formData.append("title", title)
-        formData.append("body", body)
-        fetcher.submit(formData, { action: props.action, method: "post" })
-      }
-    }
-  }, [isValidMemo, fetcher, title, body, props.action])
-
   // for handleKeyDown
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
