@@ -15,7 +15,7 @@ export const action: ActionFunction = async ({ request, context }) => {
 
 export default function Logout() {
   return (
-    <Form method="post">
+    <Form method="post" className="self-center mt-3">
       <RoundedDangerButton type="submit">
         Logout
       </RoundedDangerButton>
