@@ -36,15 +36,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+interface LoaderData {
+  login: boolean
+}
+
 export const loader: LoaderFunction = async ({ request, context }) => {
   const sessionStorage = getSessionStorage(context)
   const session = await sessionStorage.getSession(request.headers.get("Cookie"))
   const url = new URL(request.url)
   const isLoggedin = session.has("user")
   if (!isLoggedin && url.pathname !== "/login") {
-    return redirect("/login")
+    throw redirect("/login")
   }
-  return { login: isLoggedin }
+  return { login: isLoggedin } as LoaderData
 }
 
 export default function App() {
@@ -55,7 +59,7 @@ export default function App() {
 }
 
 const TopBar = () => {
-  const data = useLoaderData<typeof loader>()
+  const data = useLoaderData<LoaderData>()
   return (
     <div className="bg-orange-300 w-full pt-2 flex justify-center gap-4 sticky top-0 z-3">
       <TopBarTag to="/">New</TopBarTag>

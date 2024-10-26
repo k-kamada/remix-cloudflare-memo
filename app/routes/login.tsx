@@ -1,10 +1,10 @@
-import { ActionFunction, ActionFunctionArgs, LoaderFunction, redirect } from "@remix-run/cloudflare";
+import { redirect, type ActionFunction } from "@remix-run/cloudflare";
 import { Form, useActionData } from "@remix-run/react";
 import { RoundedNavigationButton } from "~/components/roundedButton";
 import { getAuthenticationService } from "~/services/authenticationService.server";
 import { getSessionStorage } from "~/sessions";
 
-export const action: ActionFunction = async ({ request, context }: ActionFunctionArgs) => {
+export const action: ActionFunction = async ({ request, context }) => {
   const authService = getAuthenticationService(context)
   const formData = await request.formData()
   const username = formData.get("username")?.toString() ?? ""

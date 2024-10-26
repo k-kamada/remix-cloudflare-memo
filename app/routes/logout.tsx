@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "@remix-run/cloudflare";
+import { redirect, type ActionFunction } from "@remix-run/cloudflare";
 import { Form } from "@remix-run/react";
 import { RoundedDangerButton } from "~/components/roundedButton";
 import { getSessionStorage } from "~/sessions";
