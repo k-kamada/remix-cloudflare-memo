@@ -52,7 +52,7 @@ export const loader: LoaderFunction = async ({ request, context }) => {
 }
 
 export default function App() {
-  return <div className="flex flex-col h-screen overflow-y-auto">
+  return <div className="flex flex-col h-svh overflow-y-auto">
     <TopBar />
     <Outlet />
   </div>
