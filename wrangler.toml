@@ -13,9 +13,9 @@ enabled = true
 
 [[ d1_databases ]]
 binding = "DB" # i.e. available in your Worker on env.DB
-database_name = "${env.DATABASE_NAME}"
-database_id = "${env.DATABASE_ID}"
+database_name = "remix-memo"
+database_id = "87789fb3-c810-4d74-aa86-56cb65332c83"
 
 [[kv_namespaces]]
 binding = "KV"
-id = "${env.KV_ID}"
+id = "cb90160337d14cb6bc9f27b680a38dde"
