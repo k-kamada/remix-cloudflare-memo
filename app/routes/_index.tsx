@@ -17,7 +17,7 @@ export const action: ActionFunction = async ({ request, context }: ActionFunctio
 
 export default function Index() {
   return (
-    <div className="h-full">
+    <div className="h-svh">
       <MemoForm action="/?index" />
     </div>
   );
