@@ -1,5 +1,5 @@
-import { useFetcher } from "@remix-run/react"
-import { useEffect, useState } from "react"
+import { useBeforeUnload, useFetcher } from "@remix-run/react"
+import { useCallback, useEffect, useState } from "react"
 import { RoundedSubmitButton } from "./roundedButton"
 
 // component for create new Memo
@@ -15,9 +15,30 @@ export const MemoForm = (props: { action: string }) => {
     }
   }, [fetcher])
 
-  const isValidMemo = () => {
+  const isValidMemo = useCallback(() => {
     return title !== "" || body !== ""
-  }
+  }, [title, body])
+
+  // prevent force unload when memo has any characters
+  useBeforeUnload(
+    useCallback((e: BeforeUnloadEvent) => {
+      if (isValidMemo()) {
+        e.preventDefault()
+      }
+    }, [isValidMemo])
+  )
+
+  // autosave when unmount
+  useEffect(() => {
+    return () => {
+      if (isValidMemo()) {
+        const formData = new FormData()
+        formData.append("title", title)
+        formData.append("body", body)
+        fetcher.submit(formData, { action: props.action, method: "post" })
+      }
+    }
+  }, [isValidMemo, fetcher, title, body, props.action])
 
   // for handleKeyDown
   const handleSubmit = (event: React.FormEvent) => {
