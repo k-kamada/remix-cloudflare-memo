@@ -1,6 +1,5 @@
 import { Form } from "@remix-run/react"
 import type { Memo } from "~/models/memo"
-import { RoundedDangerButton } from "./roundedButton"
 import Linkify from "linkify-react"
 
 // used for displaying purpose only (not for creating / editing)
@@ -70,29 +69,22 @@ const ManipulateBar = (props: {
               method="post"
               className="flex justify-end"
             >
-              <RoundedDangerButton type="submit">
-                Archive
-              </RoundedDangerButton>
+              <SvgSmallIconButton path="red_trashbox.svg" />
             </Form></div>)
-          : (<div>
-            <Form // for "Archived" tab
-              action={`/api/delete/${memoId}`}
-              method="post"
-              className="flex justify-end"
-            >
-              <RoundedDangerButton type="submit">
-                Delete
-              </RoundedDangerButton>
-            </Form></div>)
+          : null
         }
         <p>{generateDateTimeString(createdAt)}</p>
       </div>
-      {/* rightside items */}
-      <button
-        type="submit"
-        className="border-2 border-blue-500 rounded-lg py-1 px-2"
-        onClick={copyToClipboard}>
-        Copy
+      <SvgSmallIconButton path="blue_copy.svg" onClick={copyToClipboard} />
+    </div>
+  )
+}
+
+const SvgSmallIconButton = (props: { path: string, alt?: string, onClick?: React.MouseEventHandler<Element> }) => {
+  return (
+    <div className="h-5 w-5" >
+      <button type="submit" onClick={props.onClick} className="w-full h-full">
+        <img src={props.path} alt={props.alt ?? "icon"} />
       </button>
     </div>
   )
