@@ -13,7 +13,7 @@ export const MemoCard = (props: {
   return (
     <button
       id={props.memo.id}
-      className={`bg-white border-2 ${borderColor} rounded-md p-2 text-inherit text-left`}
+      className={`bg-white border-2 ${borderColor} rounded-md p-2 text-inherit text-left cursor-default`}
       onClick={() => props.setCurrentMemoId(props.memo.id)}
       type="button"
     >
