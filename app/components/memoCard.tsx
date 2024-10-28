@@ -22,7 +22,7 @@ export const MemoCard = (props: {
         createdAt={props.memo.createdAt}
         isArchived={props.memo.isArchived} />
       <hr />
-      <p className="py-1">{`title: ${props.memo.title}`}</p>
+      <p className="py-1">{props.memo.title}</p>
       {props.memo.body.length !== 0
         ? <div>
           <hr />
