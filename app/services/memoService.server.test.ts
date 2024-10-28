@@ -69,6 +69,23 @@ describe('MemoryMemoService', () => {
     const result = await memoService.getAllMemos(false)
     expect(result).toEqual([])
   })
+
+  it('should delete all archived memos at once', async () => {
+    const memos = [
+      new Memo("0192bf3f-fe03-7a46-a079-76597d8da210", "title1", "body1"),
+      new Memo("0192bf40-6c03-795a-b337-54bd8c9618e7", "title2", "body2"),
+      new Memo("0192bf40-99b2-7fe9-ba34-5ef5999a501e", "title3", "body3"),
+      new Memo("0192bf40-c0c0-7979-9598-4eff57d4dc04", "title4", "body4"),
+    ]
+    memos[1].isArchived = true
+    memos[3].isArchived = true
+    await Promise.all(memos.map((memo) => memoService.createMemo(memo)))
+    await memoService.deleteAllArchivedMemos()
+    const archivedResult = await memoService.getAllMemos(true)
+    expect(archivedResult).toStrictEqual([])
+    const nonArchivedResult = await memoService.getAllMemos(false)
+    expect(nonArchivedResult).toStrictEqual([memos[2], memos[0]])
+  })
 })
 
 describe('SQLiteMemoService', () => {
@@ -156,5 +173,22 @@ describe('SQLiteMemoService', () => {
     await memoService.deleteMemo(newMemo.id)
     const result = await memoService.getAllMemos(false)
     expect(result).toEqual([])
+  })
+
+  it('should delete all archived memos at once', async () => {
+    const memos = [
+      new Memo("0192bf3f-fe03-7a46-a079-76597d8da210", "title1", "body1"),
+      new Memo("0192bf40-6c03-795a-b337-54bd8c9618e7", "title2", "body2"),
+      new Memo("0192bf40-99b2-7fe9-ba34-5ef5999a501e", "title3", "body3"),
+      new Memo("0192bf40-c0c0-7979-9598-4eff57d4dc04", "title4", "body4"),
+    ]
+    memos[1].isArchived = true
+    memos[3].isArchived = true
+    await Promise.all(memos.map((memo) => memoService.createMemo(memo)))
+    await memoService.deleteAllArchivedMemos()
+    const archivedResult = await memoService.getAllMemos(true)
+    expect(archivedResult).toStrictEqual([])
+    const nonArchivedResult = await memoService.getAllMemos(false)
+    expect(nonArchivedResult).toStrictEqual([memos[2], memos[0]])
   })
 })

@@ -31,9 +31,6 @@ export default function Index() {
   return (
     <div className="h-svh">
       <MemoForm action="/?index" />
-      <div className="h-4 w-4">
-        <img src="blue_copy.svg" alt="copy icon" />
-      </div>
     </div>
   );
 }

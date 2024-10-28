@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/cloudflare"
-import { useLoaderData } from "@remix-run/react"
+import { Form, useLoaderData } from "@remix-run/react"
 import { MemoList } from "~/components/memoList"
 import { RoundedDangerButton } from "~/components/roundedButton"
 import type { Memo } from "~/models/memo"
@@ -10,6 +10,9 @@ interface LoaderData {
 }
 
 export const action: ActionFunction = async ({ context }) => {
+  const memoService = getMemoService(context.cloudflare.env)
+  const result = await memoService.deleteAllArchivedMemos()
+  return { result }
 }
 
 export const loader: LoaderFunction = async ({ context }) => {
@@ -20,10 +23,15 @@ export const loader: LoaderFunction = async ({ context }) => {
 
 export default function ArchivedList() {
   const data = useLoaderData<LoaderData>()
-  return <div className="flex flex-col">
+  return <div className="flex flex-col items-center">
     <MemoList memos={data.memos} />
-    <RoundedDangerButton type="submit">
-      Wipe All
-    </RoundedDangerButton>
+    {data.memos.length > 0
+      ? <Form method="post">
+        <RoundedDangerButton type="submit">
+          Wipe All
+        </RoundedDangerButton>
+      </Form>
+      : null
+    }
   </div>
 }

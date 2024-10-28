@@ -2,6 +2,7 @@ import { Memo } from "~/models/memo"
 import type sqlite3 from "sqlite3"
 import {
   buildArchiveMemoQuery,
+  buildDeleteAllArchivedMemoQuery,
   buildDeleteMemoQuery,
   buildInsertMemoQuery,
   buildSelectMemoQuery,
@@ -15,6 +16,7 @@ interface MemoService {
   getAllMemos: (isArchived: boolean) => Promise<Memo[]>
   archiveMemo: (id: string) => Promise<boolean>
   deleteMemo: (id: string) => Promise<boolean>
+  deleteAllArchivedMemos: () => Promise<boolean>
 }
 
 // Handle memos only on memory, for prototyping
@@ -55,6 +57,15 @@ export class MemoryMemoService implements MemoService {
     const idx = this.memos.findIndex(m => m.id === id)
     if (idx !== -1) {
       this.memos.splice(idx, 1)
+      return Promise.resolve(true)
+    }
+    return Promise.resolve(false)
+  }
+
+  deleteAllArchivedMemos = () => {
+    const newMemos = this.memos.filter((memo) => !memo.isArchived)
+    if (newMemos.length !== this.memos.length) {
+      this.memos = newMemos
       return Promise.resolve(true)
     }
     return Promise.resolve(false)
@@ -112,6 +123,19 @@ export class SQLiteMemoService implements MemoService {
     const query = buildDeleteMemoQuery()
     return new Promise<boolean>((resolve, reject) => {
       this.db.run(query, id, (err) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(true)
+        }
+      })
+    })
+  }
+
+  deleteAllArchivedMemos = (): Promise<boolean> => {
+    const query = buildDeleteAllArchivedMemoQuery()
+    return new Promise<boolean>((resolve, reject) => {
+      this.db.run(query, (err) => {
         if (err) {
           reject(err)
         } else {
@@ -188,7 +212,19 @@ export class D1MemoService implements MemoService {
       console.error("Error deleting memo:", error)
       return false
     }
-  };
+  }
+
+  deleteAllArchivedMemos = async (): Promise<boolean> => {
+    const query = buildDeleteAllArchivedMemoQuery()
+
+    try {
+      await this.DB.prepare(query).run()
+      return true
+    } catch (error) {
+      console.error("Error deleting memo:", error)
+      return false
+    }
+  }
 }
 
 let _memoService: MemoService | undefined

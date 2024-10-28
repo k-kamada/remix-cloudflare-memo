@@ -49,7 +49,7 @@ export const MemoList = (props: { memos: SerializeFrom<Memo>[] }) => {
   }
 
   return <React.Fragment>
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col w-full gap-4 p-4">
       {props.memos.map(
         (memo) =>
           <MemoCard

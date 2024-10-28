@@ -19,6 +19,10 @@ export const buildDeleteMemoQuery = (): string => {
   return "delete from memos where id = ?"
 }
 
+export const buildDeleteAllArchivedMemoQuery = (): string => {
+  return "delete from memos where isArchived = 1"
+}
+
 export const memoToDbParams = (memo: Memo) => {
   return [memo.id, memo.title, memo.body, memo.createdAt.getTime(), memo.isArchived]
 }
