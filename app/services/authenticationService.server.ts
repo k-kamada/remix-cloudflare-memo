@@ -17,6 +17,7 @@ export class KVAuthenticationService implements AuthenticationService {
     this.KV = KV
   }
 
+  // "user" and "password" is manually set to KV on Cloudflare Dashboard
   verifyPassword = async (username: string, plainPassword: string) => {
     const name = await this.KV.get("user")
     const hashedPassword = await this.KV.get("password")
