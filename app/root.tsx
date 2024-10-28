@@ -1,4 +1,7 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
+import type {
+  LinksFunction,
+  LoaderFunction,
+} from "@remix-run/cloudflare";
 import {
   Link,
   Links,
@@ -77,7 +80,6 @@ const TopBarTag = (props: { to: string, children: string }) => {
   const isActive = (path: string): boolean => {
     return location.pathname === path
   }
-
   return (
     <Link
       to={props.to}

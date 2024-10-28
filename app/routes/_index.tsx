@@ -1,4 +1,7 @@
-import type { ActionFunction, ActionFunctionArgs } from "@remix-run/cloudflare";
+import type {
+  ActionFunction,
+  ActionFunctionArgs
+} from "@remix-run/cloudflare";
 import { MemoForm } from "~/components/memoForm";
 import { Memo } from "~/models/memo";
 import { getMemoService } from "~/services/memoService.server";

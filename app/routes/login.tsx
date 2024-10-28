@@ -20,14 +20,16 @@ export const action: ActionFunction = async ({ request, context }) => {
       }
     })
   }
-  return { error: "Failed to login" }
+  return { error: true, message: "Failed to login" }
 }
 
-// export const loader: LoaderFunction = () => {
-// }
+interface ActionData {
+  error?: boolean
+  message?: string
+}
 
 export default function Login() {
-  const data = useActionData<typeof action>()
+  const data = useActionData<ActionData>()
   return (
     <Form
       method="post"
@@ -50,7 +52,7 @@ export default function Login() {
           Login
         </RoundedNavigationButton>
       </div>
-      {data ? <div className="text-red-500">{data.error}</div> : null}
+      {data?.error ? <div className="text-red-500">{data.message}</div> : null}
     </Form>
   )
 }
