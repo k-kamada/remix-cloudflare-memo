@@ -45,8 +45,7 @@ const ManipulateBar = (props: { memoId: string, createdAt: Date, isArchived: boo
   }
 
   return (
-    <div className="flex justify-between">
-      <p>{generateDateTimeString(props.createdAt)}</p>
+    <div className="flex justify-start gap-2 items-center">
       {!isArchived
         ? (<div>
           <Form // for "Memos" tab
@@ -69,6 +68,7 @@ const ManipulateBar = (props: { memoId: string, createdAt: Date, isArchived: boo
             </RoundedDangerButton>
           </Form></div>)
       }
+      <p>{generateDateTimeString(props.createdAt)}</p>
     </div>
   )
 }
