@@ -7,7 +7,7 @@ import { v7 as uuid } from "uuid"
 // create new Memo
 export const action: ActionFunction = async ({ request, context }: ActionFunctionArgs) => {
   const formData = await request.formData()
-  const title = formData.get("title")?.toString() ?? "no title"
+  const title = formData.get("title")?.toString() ?? ""
   const body = formData.get("body")?.toString() ?? ""
   const memoId = uuid()
   const memoService = getMemoService(context.cloudflare.env)
