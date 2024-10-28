@@ -37,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 interface LoaderData {
-  login: boolean
+  login?: boolean
 }
 
 export const loader: LoaderFunction = async ({ request, context }) => {
@@ -62,10 +62,12 @@ const TopBar = () => {
   const data = useLoaderData<LoaderData>()
   return (
     <div className="bg-orange-300 w-full pt-2 flex justify-center gap-4 sticky top-0 z-3">
-      <TopBarTag to="/">New</TopBarTag>
-      <TopBarTag to="/list">Memos</TopBarTag>
-      <TopBarTag to="/archivedList">Archived</TopBarTag>
-      {data.login ? <TopBarTag to="/logout">Logout</TopBarTag> : null}
+      {data.login ? <>
+        <TopBarTag to="/">New</TopBarTag>
+        <TopBarTag to="/list">Memos</TopBarTag>
+        <TopBarTag to="/archivedList">Archived</TopBarTag>
+      </>
+        : <div>Login</div>}
     </div>
   )
 }
