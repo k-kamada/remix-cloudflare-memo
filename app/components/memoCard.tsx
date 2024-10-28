@@ -12,7 +12,7 @@ export const MemoCard = (props: {
   const { memo, isFocused, setCurrentMemoId } = props
   const borderColor = isFocused ? "border-sky-400" : "border-black"
 
-  const copyMemoToClipboard = async (e: React.MouseEvent<HTMLInputElement>) => {
+  const copyMemoToClipboard = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     const text = [memo.title, memo.body].join("\n").trim()
     await navigator.clipboard.writeText(text)
@@ -50,7 +50,7 @@ const ManipulateBar = (props: {
   memoId: string,
   createdAt: Date,
   isArchived: boolean,
-  copyToClipboard: (e: React.MouseEvent<HTMLInputElement>) => void,
+  copyToClipboard: (e: React.MouseEvent<HTMLButtonElement>) => void,
 }) => {
   const { memoId, isArchived, createdAt, copyToClipboard } = props
 
