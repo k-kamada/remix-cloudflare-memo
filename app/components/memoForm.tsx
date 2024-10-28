@@ -1,17 +1,24 @@
 import { useBeforeUnload, useFetcher } from "@remix-run/react"
 import { useCallback, useEffect, useState } from "react"
 import { RoundedSubmitButton } from "./roundedButton"
+import type { CreateActionData } from "~/routes/_index"
 
 // component for create new Memo
 export const MemoForm = (props: { action: string }) => {
-  const fetcher = useFetcher()
+  const fetcher = useFetcher<CreateActionData>()
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
 
   useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data) {
+    // after successful creation
+    if (fetcher.state === "idle" && fetcher.data && !fetcher.data.error) {
       setTitle("")
       setBody("")
+    }
+    // after failed creation (restoring data)
+    if (fetcher.state === "idle" && fetcher.data && fetcher.data.error) {
+      setTitle(fetcher.data.title ?? "")
+      setBody(fetcher.data.body ?? "")
     }
   }, [fetcher])
 
@@ -75,6 +82,7 @@ export const MemoForm = (props: { action: string }) => {
           ? "Saving..."
           : "Create New(CTRL+Enter)"}
       </RoundedSubmitButton>
+      {fetcher.data?.error ? <div className="text-red-500">{fetcher.data.message}</div> : null}
     </fetcher.Form>
   )
 }

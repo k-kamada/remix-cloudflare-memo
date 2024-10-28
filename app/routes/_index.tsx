@@ -12,7 +12,16 @@ export const action: ActionFunction = async ({ request, context }: ActionFunctio
   const memoId = uuid()
   const memoService = getMemoService(context.cloudflare.env)
   const result = await memoService.createMemo(new Memo(memoId, title, body))
-  return result ? { message: "successfully created" } : { message: "failed to create" }
+  return result
+    ? { message: "successfully created", error: false }
+    : { message: "failed to create", error: true, title: title, body: body }
+}
+
+export interface CreateActionData {
+  message: string
+  error: boolean
+  title?: string
+  body?: string
 }
 
 export default function Index() {
