@@ -18,12 +18,15 @@ interface MemoService {
 }
 
 // Handle memos only on memory, for prototyping
-class MemoryMemoService implements MemoService {
+export class MemoryMemoService implements MemoService {
   private memos: Memo[] = [
     new Memo("uuid3", "TestMemo3", "Body3\npiyopiyo\npiyopiyo"),
     new Memo("uuid2", "TestMemo2", "Body2\nfugafuga\nfugafuga"),
     new Memo("uuid1", "TestMemo1", "Body1\nhogehoge\nhogehoge"),
   ]
+
+  // TODO: remove it
+  constructor() { }
 
   createMemo = (newMemo: Memo) => {
     const beforeNum = this.memos.length
@@ -49,7 +52,7 @@ class MemoryMemoService implements MemoService {
   }
 
   deleteMemo = (id: string) => {
-    const idx = this.memos.findIndex(m => m.id === id && m.isArchived)
+    const idx = this.memos.findIndex(m => m.id === id)
     if (idx !== -1) {
       this.memos.splice(idx, 1)
       return Promise.resolve(true)
