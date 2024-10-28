@@ -47,11 +47,9 @@ export default function Login() {
         placeholder="password"
         className="w-3/4"
       />
-      <div>
-        <RoundedNavigationButton type="submit">
-          Login
-        </RoundedNavigationButton>
-      </div>
+      <RoundedNavigationButton type="submit">
+        Login
+      </RoundedNavigationButton>
       {data?.error ? <div className="text-red-500">{data.message}</div> : null}
     </Form>
   )

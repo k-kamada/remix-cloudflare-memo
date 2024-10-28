@@ -16,7 +16,5 @@ export const loader: LoaderFunction = async ({ context }) => {
 
 export default function ArchivedList() {
   const data = useLoaderData<LoaderData>()
-  return <div>
-    <MemoList memos={data.memos} />
-  </div>
+  return <MemoList memos={data.memos} />
 }
