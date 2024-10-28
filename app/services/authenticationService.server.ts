@@ -2,7 +2,7 @@ import type { AppLoadContext } from "@remix-run/cloudflare"
 import bcrypt from "bcryptjs"
 
 interface AuthenticationService {
-  verify: (username: string, plainPassword: string) => Promise<boolean>
+  verifyPassword: (username: string, plainPassword: string) => Promise<boolean>
 }
 
 const verifyPassword = async (plainPassword: string, hashedPassword: string): Promise<boolean> => {
@@ -17,7 +17,7 @@ export class KVAuthenticationService implements AuthenticationService {
     this.KV = KV
   }
 
-  verify = async (username: string, plainPassword: string) => {
+  verifyPassword = async (username: string, plainPassword: string) => {
     const name = await this.KV.get("user")
     const hashedPassword = await this.KV.get("password")
     if (name && hashedPassword && name === username) {
@@ -34,7 +34,7 @@ export class MemoryAuthenticationService implements AuthenticationService {
     ["password", "$2a$10$pJwEenLsLEFvetKPIb8gDOl9WHbkKbayNZSq4VwynZERDQxTn7Uu6"], // hashed 'admin'
   ])
 
-  verify = async (username: string, plainPassword: string) => {
+  verifyPassword = async (username: string, plainPassword: string) => {
     const name = this.OnMemoryKV.get("user")
     const hashedPassword = this.OnMemoryKV.get("password")
     if (name && hashedPassword && name === username) {

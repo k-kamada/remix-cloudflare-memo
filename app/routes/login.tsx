@@ -9,7 +9,7 @@ export const action: ActionFunction = async ({ request, context }) => {
   const formData = await request.formData()
   const username = formData.get("username")?.toString() ?? ""
   const plainPassword = formData.get("password")?.toString() ?? ""
-  const result = await authService.verify(username, plainPassword)
+  const result = await authService.verifyPassword(username, plainPassword)
   if (result) {
     const sessionStorage = getSessionStorage(context)
     const session = await sessionStorage.getSession(request.headers.get("Cookie"))

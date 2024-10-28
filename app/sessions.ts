@@ -1,9 +1,12 @@
-import type { AppLoadContext, SessionData } from "@remix-run/cloudflare";
+import type {
+  AppLoadContext,
+  SessionData,
+  SessionStorage
+} from "@remix-run/cloudflare";
 import {
   createCookie,
   createMemorySessionStorage,
   createWorkersKVSessionStorage,
-  SessionStorage,
 } from "@remix-run/cloudflare";
 
 const sessionCookie = createCookie("__session", {
