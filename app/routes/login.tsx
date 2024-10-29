@@ -1,4 +1,8 @@
-import { redirect, type ActionFunction } from "@remix-run/cloudflare";
+import {
+  type LoaderFunction,
+  redirect,
+  type ActionFunction
+} from "@remix-run/cloudflare";
 import { Form, useActionData } from "@remix-run/react";
 import { RoundedNavigationButton } from "~/components/roundedButton";
 import { getAuthenticationService } from "~/services/authenticationService.server";
@@ -21,6 +25,16 @@ export const action: ActionFunction = async ({ request, context }) => {
     })
   }
   return { error: true, message: "Failed to login" }
+}
+
+export const loader: LoaderFunction = async ({ request, context }) => {
+  const sessionStorage = getSessionStorage(context)
+  const session = await sessionStorage.getSession(request.headers.get("Cookie"))
+  const isLoggedin = session.has("user")
+  if (isLoggedin) {
+    throw redirect("/")
+  }
+  return { login: isLoggedin }
 }
 
 interface ActionData {
