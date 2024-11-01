@@ -230,8 +230,7 @@ export class D1MemoService implements MemoService {
 let _memoService: MemoService | undefined
 export const getMemoService = (env: Env): MemoService => {
   if (_memoService == null) {
-    const nodenv = process.env.NODE_ENV
-    if (nodenv === 'development') {
+    if (env.ENVIRONMENT === 'development') {
       _memoService = new MemoryMemoService()
     } else {
       _memoService = new D1MemoService(env.DB)

@@ -4,6 +4,7 @@ compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2024-10-18"
 main = "./build/worker/index.js"
 assets = { directory = "./build/client" }
+vars = { ENVIRONMENT = "production" }
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
@@ -11,7 +12,7 @@ assets = { directory = "./build/client" }
 [observability]
 enabled = true
 
-[[ d1_databases ]]
+[[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "remix-memo"
 database_id = "87789fb3-c810-4d74-aa86-56cb65332c83"

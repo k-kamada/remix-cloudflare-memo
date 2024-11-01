@@ -2,8 +2,7 @@
 
 interface Env {
 	KV: KVNamespace;
-	DATABASE_NAME: string;
-	DATABASE_ID: string;
-	KV_ID: string;
+	SESSION_SECRET: string;
+	ENVIRONMENT: string;
 	DB: D1Database;
 }

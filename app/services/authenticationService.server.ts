@@ -48,7 +48,7 @@ export class MemoryAuthenticationService implements AuthenticationService {
 let _authenticationService: AuthenticationService | undefined
 export const getAuthenticationService = (context: AppLoadContext) => {
   if (_authenticationService == null) {
-    if (process.env.NODE_ENV === "development") {
+    if (context.cloudflare.env.ENVIRONMENT === "development") {
       _authenticationService = new MemoryAuthenticationService()
     } else {
       _authenticationService = new KVAuthenticationService(context.cloudflare.env.KV)

@@ -1,5 +1,6 @@
 import type {
   AppLoadContext,
+  Cookie,
   SessionData,
   SessionStorage
 } from "@remix-run/cloudflare";
@@ -9,28 +10,34 @@ import {
   createWorkersKVSessionStorage,
 } from "@remix-run/cloudflare";
 
-const sessionCookie = createCookie("__session", {
-  secrets: ["r3m1xr0ck5"],
-  sameSite: true,
-  httpOnly: true,
-  secure: true,
-});
+const createSessionCookie = (context: AppLoadContext) => {
+  return createCookie("__session", {
+    secrets: [context.cloudflare.env.SESSION_SECRET],
+    sameSite: true,
+    httpOnly: true,
+    secure: true,
+    maxAge: 60 * 60 * 24 * 7
+  })
+}
 
-let _kvSessionStorage: SessionStorage<SessionData, SessionData> | undefined
-
-const createKVSessionStorage = (kv: KVNamespace) => {
+const createKVSessionStorage = (kv: KVNamespace, cookie: Cookie) => {
   return createWorkersKVSessionStorage({
     kv,
-    cookie: sessionCookie,
+    cookie: cookie,
   });
 }
 
+let _sessionStorage: SessionStorage<SessionData, SessionData> | undefined
 export const getSessionStorage = (context: AppLoadContext) => {
-  if (_kvSessionStorage == null) {
-    if (process.env.NODE_ENV === "production") {
-      _kvSessionStorage = createMemorySessionStorage({ cookie: sessionCookie })
+  if (_sessionStorage == null) {
+    const cookie = createSessionCookie(context)
+    if (context.cloudflare.env.ENVIRONMENT === "production") {
+      console.log("production")
+      _sessionStorage = createKVSessionStorage(context.cloudflare.env.KV, cookie)
+    } else {
+      console.log("development")
+      _sessionStorage = createMemorySessionStorage({ cookie: cookie })
     }
-    _kvSessionStorage = createKVSessionStorage(context.cloudflare.env.KV)
   }
-  return _kvSessionStorage
+  return _sessionStorage
 }
